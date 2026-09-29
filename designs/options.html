@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CRM Design Options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Inter, system-ui, sans-serif; background: #eceef2; color: #111; }
+  .picker { position: sticky; top: 0; z-index: 50; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 14px 20px; background: #111827; color: #fff; }
+  .picker b { margin-right: 10px; font-size: 14px; }
+  .picker button { font: 500 13px Inter, sans-serif; border: 1px solid #374151; background: transparent; color: #d1d5db; padding: 8px 14px; border-radius: 999px; cursor: pointer; }
+  .picker button.on { background: #fff; color: #111; border-color: #fff; }
+  .picker .desc { flex-basis: 100%; font-size: 12.5px; color: #9ca3af; margin-top: 4px; }
+  .stage { padding: 24px 16px 60px; }
+  .frame { max-width: 1240px; margin: 0 auto; border-radius: 14px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.18); animation: show .45s ease; }
+  @keyframes show { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  /* ---------- shared skeleton ---------- */
+  .app { display: grid; grid-template-columns: 230px 1fr; min-height: 760px; }
+  .side { padding: 24px 16px; display: flex; flex-direction: column; gap: 4px; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; margin: 0 8px 26px; }
+  .logo i { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; font-style: normal; font-size: 14px; }
+  .nav a { display: flex; align-items: center; gap: 10px; padding: 10px 12px; font-size: 14px; border-radius: 8px; text-decoration: none; color: inherit; transition: background .2s, color .2s; }
+  .nav a svg { width: 17px; height: 17px; flex: none; }
+  .content { padding: 28px 34px; }
+  .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 26px; gap: 16px; flex-wrap: wrap; }
+  .top h1 { margin: 0; font-size: 24px; }
+  .top p { margin: 4px 0 0; font-size: 13px; }
+  .who { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  .who i { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-weight: 600; font-size: 13px; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .stat .n { font-size: 30px; font-weight: 700; margin: 6px 0 2px; }
+  .stat .l { font-size: 13px; }
+  .stat .d { font-size: 12px; }
+  .cols { display: grid; grid-template-columns: 1.35fr 1fr; gap: 20px; }
+  .block h3 { margin: 0 0 14px; font-size: 15px; display: flex; justify-content: space-between; align-items: center; }
+  .block h3 small { font-weight: 500; font-size: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; font-weight: 500; font-size: 11.5px; text-transform: uppercase; letter-spacing: .04em; padding: 0 8px 10px; }
+  td { padding: 11px 8px; }
+  .bar { height: 6px; border-radius: 6px; overflow: hidden; margin-top: 6px; }
+  .bar span { display: block; height: 100%; border-radius: 6px; transition: width 1s ease; }
+  .camp { padding: 10px 0; }
+  .camp .row { display: flex; justify-content: space-between; font-size: 13px; }
+  .form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px; }
+  .form label { display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 500; }
+  .form input, .form select { font: inherit; font-size: 14px; padding: 10px 12px; outline: none; width: 100%; }
+  .form .full { grid-column: span 2; }
+  .btn { font: 600 14px inherit; padding: 11px 18px; cursor: pointer; border: 0; transition: transform .15s, box-shadow .2s, background .2s; }
+  .btn:hover { transform: translateY(-1px); }
+  .pill { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; }
+  .dupe { display: flex; gap: 10px; margin-top: 12px; }
+  .dupe input { flex: 1; }
+
+  /* ================= 1. CLEAN WHITE ================= */
+  .t1 { background: #fff; color: #0f172a; font-family: Inter, sans-serif; }
+  .t1 .side { background: #fafbfc; border-right: 1px solid #eef0f3; }
+  .t1 .logo i { background: #2563eb; color: #fff; }
+  .t1 .nav a { color: #64748b; }
+  .t1 .nav a:hover { background: #f1f5f9; color: #0f172a; }
+  .t1 .nav a.on { background: #eff6ff; color: #2563eb; font-weight: 600; }
+  .t1 .top p, .t1 .stat .l, .t1 th, .t1 .block h3 small { color: #64748b; }
+  .t1 .who i { background: #e0e7ff; color: #3730a3; }
+  .t1 .stat { border: 1px solid #eef0f3; border-radius: 12px; padding: 18px; }
+  .t1 .stat .d { color: #16a34a; }
+  .t1 .block { border: 1px solid #eef0f3; border-radius: 12px; padding: 20px; }
+  .t1 td { border-top: 1px solid #f1f5f9; }
+  .t1 .bar { background: #f1f5f9; } .t1 .bar span { background: #2563eb; }
+  .t1 .form input, .t1 .form select { border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; }
+  .t1 .form input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px #dbeafe; }
+  .t1 .btn { background: #2563eb; color: #fff; border-radius: 8px; }
+  .t1 .pill { background: #dcfce7; color: #15803d; }
+  .t1 .cols + .cols { margin-top: 20px; }
+
+  /* ================= 2. MIDNIGHT CALM ================= */
+  .t2 { background: #0f1720; color: #e6edf3; font-family: "Plus Jakarta Sans", sans-serif; }
+  .t2 .side { background: #0b1118; }
+  .t2 .logo i { background: #14b8a6; color: #04201d; }
+  .t2 .nav a { color: #8b98a5; }
+  .t2 .nav a:hover { background: #16212c; color: #e6edf3; }
+  .t2 .nav a.on { background: #132a2a; color: #2dd4bf; }
+  .t2 .top p, .t2 .stat .l, .t2 th, .t2 .block h3 small { color: #8b98a5; }
+  .t2 .who i { background: #1f2d3a; color: #2dd4bf; }
+  .t2 .stat { background: #151f2a; border-radius: 14px; padding: 18px; }
+  .t2 .stat .d { color: #2dd4bf; }
+  .t2 .block { background: #151f2a; border-radius: 14px; padding: 20px; }
+  .t2 td { border-top: 1px solid #1f2b37; }
+  .t2 .bar { background: #1f2b37; } .t2 .bar span { background: linear-gradient(90deg, #14b8a6, #38bdf8); }
+  .t2 .form input, .t2 .form select { background: #0f1720; border: 1px solid #243240; border-radius: 10px; color: #e6edf3; }
+  .t2 .form input:focus { border-color: #14b8a6; }
+  .t2 .btn { background: #14b8a6; color: #04201d; border-radius: 10px; }
+  .t2 .pill { background: #123b36; color: #5eead4; }
+  .t2 .cols + .cols { margin-top: 20px; }
+
+  /* ================= 3. SOFT GLASS ================= */
+  .t3 { background: radial-gradient(circle at 10% 10%, #dbeafe, transparent 40%), radial-gradient(circle at 90% 20%, #fce7f3, transparent 40%), radial-gradient(circle at 60% 90%, #ede9fe, transparent 45%), #f8fafc; color: #1e1b4b; font-family: "Plus Jakarta Sans", sans-serif; }
+  .t3 .side { background: rgba(255,255,255,.45); backdrop-filter: blur(14px); border-right: 1px solid rgba(255,255,255,.7); }
+  .t3 .logo i { background: linear-gradient(135deg, #818cf8, #ec4899); color: #fff; border-radius: 10px; }
+  .t3 .nav a { color: #6b6b8f; }
+  .t3 .nav a:hover { background: rgba(255,255,255,.6); }
+  .t3 .nav a.on { background: #fff; color: #4f46e5; font-weight: 600; box-shadow: 0 4px 14px rgba(79,70,229,.12); }
+  .t3 .top p, .t3 .stat .l, .t3 th, .t3 .block h3 small { color: #6b6b8f; }
+  .t3 .who i { background: linear-gradient(135deg, #818cf8, #ec4899); color: #fff; }
+  .t3 .stat, .t3 .block { background: rgba(255,255,255,.6); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,.9); border-radius: 18px; padding: 18px; box-shadow: 0 8px 30px rgba(99,102,241,.08); transition: transform .3s, box-shadow .3s; }
+  .t3 .block { padding: 20px; }
+  .t3 .stat:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(99,102,241,.16); }
+  .t3 .stat .d { color: #7c3aed; }
+  .t3 td { border-top: 1px solid rgba(99,102,241,.08); }
+  .t3 .bar { background: rgba(99,102,241,.1); } .t3 .bar span { background: linear-gradient(90deg, #818cf8, #ec4899); }
+  .t3 .form input, .t3 .form select { background: rgba(255,255,255,.8); border: 1px solid #e0e7ff; border-radius: 12px; }
+  .t3 .form input:focus { border-color: #818cf8; box-shadow: 0 0 0 4px rgba(129,140,248,.15); }
+  .t3 .btn { background: linear-gradient(135deg, #6366f1, #ec4899); color: #fff; border-radius: 12px; box-shadow: 0 8px 20px rgba(236,72,153,.25); }
+  .t3 .pill { background: #ede9fe; color: #6d28d9; }
+  .t3 .cols + .cols { margin-top: 20px; }
+
+  /* ================= 4. CORPORATE NAVY (top nav) ================= */
+  .t4 { background: #f4f6f9; color: #1c2434; font-family: "DM Sans", sans-serif; }
+  .t4 .app { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .t4 .side { flex-direction: row; align-items: center; background: #0b2447; color: #fff; padding: 0 28px; gap: 2px; flex-wrap: wrap; }
+  .t4 .logo { margin: 0 28px 0 0; padding: 16px 0; }
+  .t4 .logo i { background: #19a974; color: #fff; }
+  .t4 .nav { display: contents; }
+  .t4 .nav a { color: #a7b8d4; border-radius: 0; padding: 20px 14px; border-bottom: 3px solid transparent; }
+  .t4 .nav a svg { display: none; }
+  .t4 .nav a:hover { color: #fff; }
+  .t4 .nav a.on { color: #fff; border-bottom-color: #19a974; font-weight: 700; }
+  .t4 .top p, .t4 .stat .l, .t4 th, .t4 .block h3 small { color: #6b7a90; }
+  .t4 .who i { background: #19a974; color: #fff; }
+  .t4 .stat { background: #fff; border-radius: 6px; padding: 18px; border-left: 4px solid #0b2447; }
+  .t4 .stat:nth-child(2) { border-left-color: #19a974; } .t4 .stat:nth-child(3) { border-left-color: #f59e0b; } .t4 .stat:nth-child(4) { border-left-color: #e11d48; }
+  .t4 .stat .d { color: #19a974; font-weight: 700; }
+  .t4 .block { background: #fff; border-radius: 6px; padding: 20px; }
+  .t4 th { background: #f4f6f9; padding: 9px 8px; }
+  .t4 td { border-bottom: 1px solid #eef1f5; }
+  .t4 .bar { background: #eef1f5; border-radius: 2px; } .t4 .bar span { background: #0b2447; border-radius: 2px; }
+  .t4 .form input, .t4 .form select { border: 1px solid #d5dce6; border-radius: 4px; background: #fff; }
+  .t4 .form input:focus { border-color: #0b2447; }
+  .t4 .btn { background: #19a974; color: #fff; border-radius: 4px; }
+  .t4 .pill { background: #e7f7f0; color: #0f7a53; border-radius: 3px; }
+  .t4 .cols + .cols { margin-top: 20px; }
+
+  /* ================= 5. WARM MINIMAL (no boxes) ================= */
+  .t5 { background: #faf6f0; color: #2b2118; font-family: "DM Sans", sans-serif; }
+  .t5 .side { background: transparent; border-right: 1px solid #eadfce; }
+  .t5 .logo { font-family: Fraunces, serif; font-size: 22px; }
+  .t5 .logo i { background: #c2410c; color: #fff; border-radius: 50%; }
+  .t5 .nav a { color: #8a7560; border-radius: 0; padding-left: 14px; border-left: 2px solid transparent; }
+  .t5 .nav a svg { display: none; }
+  .t5 .nav a:hover { color: #2b2118; }
+  .t5 .nav a.on { color: #c2410c; border-left-color: #c2410c; font-weight: 700; }
+  .t5 .top h1 { font-family: Fraunces, serif; font-size: 34px; font-weight: 500; }
+  .t5 .top p, .t5 .stat .l, .t5 th, .t5 .block h3 small { color: #8a7560; }
+  .t5 .who i { background: #f3e2cf; color: #c2410c; }
+  .t5 .stats { gap: 0; border-top: 1px solid #eadfce; border-bottom: 1px solid #eadfce; padding: 20px 0; }
+  .t5 .stat { padding: 0 20px; border-left: 1px solid #eadfce; } .t5 .stat:first-child { border-left: 0; padding-left: 0; }
+  .t5 .stat .n { font-family: Fraunces, serif; font-size: 40px; font-weight: 500; }
+  .t5 .stat .d { color: #c2410c; }
+  .t5 .block h3 { font-family: Fraunces, serif; font-size: 20px; font-weight: 500; border-bottom: 1px solid #eadfce; padding-bottom: 10px; }
+  .t5 td { border-top: 1px solid #f1e8dc; }
+  .t5 .bar { background: #efe4d6; height: 3px; } .t5 .bar span { background: #c2410c; }
+  .t5 .form input, .t5 .form select { background: transparent; border: 0; border-bottom: 1.5px solid #d9c9b4; border-radius: 0; padding: 8px 0; }
+  .t5 .form input:focus { border-bottom-color: #c2410c; }
+  .t5 .btn { background: #2b2118; color: #faf6f0; border-radius: 999px; padding: 12px 24px; }
+  .t5 .btn:hover { background: #c2410c; }
+  .t5 .pill { background: transparent; color: #15803d; padding: 0; }
+  .t5 .pill::before { content: "● "; }
+  .t5 .cols + .cols { margin-top: 34px; }
+
+  @media (max-width: 900px) {
+    .app { grid-template-columns: 1fr; }
+    .side { flex-direction: row; flex-wrap: wrap; border: 0 !important; }
+    .logo { width: 100%; margin-bottom: 10px; }
+    .nav { display: flex; flex-wrap: wrap; gap: 4px; }
+    .nav a { padding: 8px 10px; font-size: 13px; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .t5 .stat { border-left: 0; padding: 10px 0; }
+    .cols { grid-template-columns: 1fr; }
+    .content { padding: 22px 16px; }
+    .form { grid-template-columns: 1fr; } .form .full { grid-column: auto; }
+  }
+</style>
+</head>
+<body>
+  <div class="picker" id="picker">
+    <b>CRM designs:</b>
+    <button data-t="1" class="on">1 · Clean White</button>
+    <button data-t="2">2 · Midnight Calm</button>
+    <button data-t="3">3 · Soft Glass</button>
+    <button data-t="4">4 · Corporate Navy</button>
+    <button data-t="5">5 · Warm Minimal</button>
+    <span class="desc" id="desc"></span>
+  </div>
+  <div class="stage"><div class="frame" id="frame"></div></div>
+
+<script>
+const DESC = {
+  1: "Safed aur saaf, neela accent — modern SaaS jaisa (Notion/Stripe style). Sab se professional aur parhne mein asaan.",
+  2: "Dark theme lekin sukoon wala — teal accent, koi neon nahi. Raat ki shift walon ki aankhon ke liye aasan.",
+  3: "Halka pastel gradient, sheeshe jaise translucent panels, hover pe halki si lift. Thoda modern, magar over nahi.",
+  4: "Upar navy menu bar, safed content, rangeen side strips — classic call center / corporate look.",
+  5: "Cream background, serif headings, orange accent — bilkul boxes nahi, sirf lines aur khuli jagah."
+};
+const ICONS = {
+  Dashboard: '<path d="M3 13h8V3H3zm0 8h8v-6H3zm10 0h8V11h-8zm0-18v6h8V3z" fill="currentColor"/>',
+  "Lead Submission": '<path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5z" fill="currentColor"/>',
+  "Dupe Checker": '<path d="M15.5 14h-.8l-.3-.3a6.5 6.5 0 10-.7.7l.3.3v.8l5 5 1.5-1.5-5-5zm-6 0a4.5 4.5 0 110-9 4.5 4.5 0 010 9z" fill="currentColor"/>',
+  "Active Campaigns": '<path d="M3 11l18-7-7 18-2.5-7.5z" fill="currentColor"/>',
+  Progress: '<path d="M5 21V9h3v12zm7 0V3h3v18zm7 0v-7h3v7z" fill="currentColor"/>',
+  Tools: '<path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.7 4.7C.6 7.1 1 10.1 3 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1 0-1.4z" fill="currentColor"/>'
+};
+const leads = [
+  ["6:00 PM", "Owais", "Valerie Beard", "MED CPL (ADO)", "OH"],
+  ["5:38 PM", "Sufiyan", "Jill Sammons", "MED CPL (ADO)", "SC"],
+  ["4:35 PM", "Ali", "Virgil Gainey", "FE 180 (ADO)", "PA"],
+  ["2:25 PM", "Wasiq", "Mary Frasier", "MED CPL (ADO)", "GA"],
+];
+const camps = [["MED CPL (ADO)", 14, 30], ["FE 180 (ADO)", 1, 5], ["180 FE SYED (ATTA)", 3, 10], ["FE 140 (ELIJ)", 2, 5]];
+
+function render(t) {
+  const nav = Object.keys(ICONS).map((n, i) => `<a href="#" class="${i === 0 ? "on" : ""}"><svg viewBox="0 0 24 24">${ICONS[n]}</svg>${n}</a>`).join("");
+  document.getElementById("frame").outerHTML = `
+  <div class="frame t${t}" id="frame"><div class="app">
+    <aside class="side"><div class="logo"><i>A</i>Your CRM</div><nav class="nav">${nav}</nav></aside>
+    <main class="content">
+      <div class="top"><div><h1>Good evening, Owais</h1><p>Tuesday, Sep 29 · 7:42 PM ET</p></div><div class="who"><i>OW</i>Owais · Agent</div></div>
+      <div class="stats">
+        ${[["Today's leads", 15, "+4 vs yesterday"], ["This week", 42, "Mon – Sun"], ["This month", 356, "September"], ["Duplicates", 12, "flagged"]]
+          .map(s => `<div class="stat"><div class="l">${s[0]}</div><div class="n">${s[1]}</div><div class="d">${s[2]}</div></div>`).join("")}
+      </div>
+      <div class="cols">
+        <section class="block"><h3>Recent submissions <small>auto-refresh</small></h3>
+          <table><thead><tr><th>Time</th><th>Agent</th><th>Customer</th><th>Campaign</th><th>State</th></tr></thead>
+          <tbody>${leads.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table>
+        </section>
+        <section class="block"><h3>Active campaigns <small>today vs target</small></h3>
+          ${camps.map(c => `<div class="camp"><div class="row"><span>${c[0]} <span class="pill">Active</span></span><span>${c[1]}/${c[2]}</span></div><div class="bar"><span style="width:${Math.round(c[1] / c[2] * 100)}%"></span></div></div>`).join("")}
+        </section>
+      </div>
+      <div class="cols">
+        <section class="block"><h3>Submit a lead <small>goes to your sheet</small></h3>
+          <div class="form">
+            <label>First name<input placeholder="John"></label><label>Last name<input placeholder="Smith"></label>
+            <label>Phone<input placeholder="(555) 555-5555"></label><label>Date of birth<input placeholder="MM/DD/YYYY"></label>
+            <label class="full">Campaign<select><option>MED CPL BLIND TRANSFERS (ADO)</option></select></label>
+            <div><button class="btn">Submit lead</button></div>
+          </div>
+        </section>
+        <section class="block"><h3>Dupe checker</h3>
+          <p style="margin:0;font-size:13px;opacity:.75">Transfer se pehle number check karein.</p>
+          <div class="dupe form" style="display:flex"><input placeholder="(555) 555-5555"><button class="btn">Check</button></div>
+        </section>
+      </div>
+    </main>
+  </div></div>`;
+  document.getElementById("desc").textContent = DESC[t];
+  document.querySelectorAll("#picker button").forEach(b => b.classList.toggle("on", b.dataset.t == t));
+  try { history.replaceState(null, "", "#" + t); } catch {}
+}
+document.getElementById("picker").addEventListener("click", e => { const b = e.target.closest("button"); if (b) render(b.dataset.t); });
+render(Number(location.hash.slice(1)) || 1);
+</script>
+</body>
+</html>
